@@ -3,7 +3,7 @@ var inquirer = require('inquirer');
 
 var conn = mysql.createConnection({
     host: "localhost",
-    port: 3306,
+    port: 8889,
     user: "root",
     password: "root",
     database: "bamazon"
@@ -59,11 +59,15 @@ function prompt(){
             if(stockNum >= data.quantity){
                 var diff = stockNum - data.quantity;
                 var id = parseInt(data.idChoice);
+                var sales = res[0].product_sales + res[0].price * data.quantity;
                 
-                conn.query("UPDATE products SET ? WHERE ?",
+                conn.query("UPDATE products SET ? , ? WHERE ?",
                 [
                   {
                     stock_quantity: diff
+                  },
+                  {
+                    product_sales: sales
                   },
                   {
                     item_id: id
